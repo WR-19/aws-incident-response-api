@@ -13,34 +13,19 @@ resource "aws_dynamodb_table" "app_table" {
   }
 }
 
-resource "aws_iam_role" "lambda_role" {
-  name = "lambda-incident-role"
-
-  assume_role_policy = jsonencode({
-    Version = "2012-10-17"
-    Statement = [{
-      Action = "sts:AssumeRole"
-      Effect = "Allow"
-      Principal = {
-        Service = "lambda.amazonaws.com"
-      }
-    }]
-  })
-}
-
 resource "aws_iam_policy" "lambda_policy" {
   name = "lambda-incident-policy"
 
   policy = jsonencode({
     Version = "2012-10-17"
     Statement = [
-      {
-        Action = [
-          "dynamodb:PutItem"
-        ]
-        Effect   = "Allow"
-        Resource = aws_dynamodb_table.app_table.arn
-      },
+#      {
+ #       Action = [
+  #        "dynamodb:PutItem"
+   #     ]
+    #    Effect   = "Allow"
+     #   Resource = aws_dynamodb_table.app_table.arn
+      #},   # <-- COMMA IS REQUIRED HERE
       {
         Action = [
           "logs:CreateLogGroup",
@@ -49,6 +34,22 @@ resource "aws_iam_policy" "lambda_policy" {
         ]
         Effect   = "Allow"
         Resource = "*"
+      }
+    ]
+  })
+}
+resource "aws_iam_role" "lambda_role" {
+  name = "lambda-execution-role"
+
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+        Principal = {
+          Service = "lambda.amazonaws.com"
+        }
+        Action = "sts:AssumeRole"
       }
     ]
   })
