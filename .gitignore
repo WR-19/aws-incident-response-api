@@ -1,5 +1,15 @@
+# Terraform
+*.tfstate
+*.tfstate.backup
 .terraform/
-**/.terraform/*
-terraform/.terraform/
-*.tfstate*
+
+# AWS
 .aws/
+awscliv2.zip
+
+# Python
+__pycache__/
+*.pyc
+
+# OS
+.DS_Store
